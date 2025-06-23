@@ -70,38 +70,22 @@
         <a id="login-button" class="login-button">SPOTIFY İLE GİRİŞ YAP</a>
     </div>
 
-    <script>
-        // Spotify OAuth Configuration
-        const clientId = 'affef24324e44ba58d0c7bac3bcd4423';
-        const redirectUri = 'https://efkantuncc.github.io/ekotify/callback.html';
-        
-        const scopes = [
-            'user-read-currently-playing',
-            'user-read-recently-played',
-            'user-read-playback-state',
-            'user-top-read',
-            'user-modify-playback-state',
-            'user-library-read',
-            'user-library-modify',
-            'playlist-read-private',
-            'playlist-read-collaborative',
-            'playlist-modify-public',
-            'playlist-modify-private'
-        ];
+<script>
+document.getElementById('login-button').addEventListener('click', function() {
+    const clientId = 'affef24324e44ba58d0c7bac3bcd4423';
+    const redirectUri = 'https://efkantuncc.github.io/ekotify/callback.html';
+    const scopes = 'user-read-private user-read-email user-top-read';
+    
+    const authUrl = new URL('https://accounts.spotify.com/authorize');
+    authUrl.searchParams.append('client_id', clientId);
+    authUrl.searchParams.append('response_type', 'token');
+    authUrl.searchParams.append('redirect_uri', redirectUri);
+    authUrl.searchParams.append('scope', scopes);
+    authUrl.searchParams.append('show_dialog', 'true');
+    
+    window.location.href = authUrl.toString();
+});
+</script>
 
-        // Login butonu event listener'ı
-        document.getElementById('login-button').addEventListener('click', function() {
-            const authEndpoint = 'https://accounts.spotify.com/authorize';
-            const queryParams = new URLSearchParams({
-                client_id: clientId,
-                redirect_uri: redirectUri,
-                scope: scopes.join(' '),
-                response_type: 'token',
-                show_dialog: 'true'
-            });
-            
-            window.location.href = `${authEndpoint}?${queryParams.toString()}`;
-        });
-    </script>
 </body>
 </html>
