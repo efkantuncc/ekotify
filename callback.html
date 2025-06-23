@@ -42,32 +42,26 @@
         <p>Giriş yapılıyor, lütfen bekleyin...</p>
     </div>
 
-    <script>
-        // Token'i işle ve ana uygulamaya yönlendir
-        function handleToken() {
-            const hash = window.location.hash.substring(1);
-            const params = new URLSearchParams(hash);
-            
-            if (params.has('access_token')) {
-                const accessToken = params.get('access_token');
-                const expiresIn = params.get('expires_in');
-                const tokenType = params.get('token_type');
-                
-                // Token'i localStorage'a kaydet
-                localStorage.setItem('spotify_access_token', accessToken);
-                localStorage.setItem('spotify_token_expires_in', expiresIn);
-                localStorage.setItem('spotify_token_type', tokenType);
-                
-                // Ana uygulamaya yönlendir
-                window.location.href = 'https://efkantuncc.github.io/ekotify/app.html';
-            } else {
-                // Hata durumunda login sayfasına geri dön
-                window.location.href = 'https://efkantuncc.github.io/ekotify/';
-            }
-        }
-        
-        // Sayfa yüklendiğinde token'i işle
-        window.addEventListener('load', handleToken);
-    </script>
+<script>
+function getHashParams() {
+    const hash = window.location.hash.substring(1);
+    return new URLSearchParams(hash);
+}
+
+const params = getHashParams();
+const accessToken = params.get('access_token');
+const error = params.get('error');
+
+if (error) {
+    console.error('Auth Error:', error);
+    window.location.href = 'https://efkantuncc.github.io/ekotify/';
+} else if (accessToken) {
+    localStorage.setItem('spotify_access_token', accessToken);
+    window.location.href = 'https://efkantuncc.github.io/ekotify/app.html';
+} else {
+    window.location.href = 'https://efkantuncc.github.io/ekotify/callback.html';
+}
+</script>
+
 </body>
 </html>
