@@ -779,6 +779,16 @@
                 console.error(`Error skipping ${direction} track:`, error);
             }
         }
+
+            // Spotify API Configuration
+    const clientId = 'affef24324e44ba58d0c7bac3bcd4423';
+    const redirectUri = 'https://efkantuncc.github.io/ekotify/'; // GitHub Pages URL'iniz
+    
+    // Login butonu event listener'ını güncelleyin
+    loginButton.addEventListener('click', () => {
+        const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scopes.join('%20')}&response_type=token&show_dialog=true`;
+        window.location.href = authUrl;
+    });
         
         // Start the app when the page loads
         window.addEventListener('load', init);
