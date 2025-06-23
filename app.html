@@ -399,7 +399,7 @@
         // Spotify API Access
         const accessToken = localStorage.getItem('spotify_access_token');
         if (!accessToken) {
-            window.location.href = 'https://efkantuncc.github.io/ekotify/';
+            window.location.href = 'http://127.0.0.1:80/';
         }
 
         // DOM Elements
@@ -425,7 +425,7 @@
                 if (userResponse.status === 401) {
                     // Token expired, redirect to login
                     localStorage.removeItem('spotify_access_token');
-                    window.location.href = 'https://efkantuncc.github.io/ekotify/';
+                    window.location.href = 'https://efkantuncc.github.io/ekotify';
                     return;
                 }
                 
