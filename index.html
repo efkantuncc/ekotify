@@ -1,110 +1,124 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Efkan Tunç – Sosyal Medya & Reklam Yönetimi</title>
-
-  <!-- Press Start 2P (pixel) font -->
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"/>
-
-  <!-- Font Awesome Icons -->
-  <script src="https://kit.fontawesome.com/yourkitid.js" crossorigin="anonymous"></script>
-
-  <!-- Ana CSS -->
-  <link rel="stylesheet" href="css/styles.css" />
+  <title>Ekotify - Spotify Web Player</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #121212;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    h1 {
+      margin-bottom: 2rem;
+      color: #1DB954;
+    }
+    button {
+      padding: 1rem 2rem;
+      margin: 1rem;
+      background-color: #1DB954;
+      border: none;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: 0.3s ease;
+    }
+    button:hover {
+      background-color: #1ed760;
+    }
+    #player-status {
+      margin-top: 2rem;
+    }
+    @media(max-width: 600px) {
+      h1 { font-size: 1.5rem; }
+      button { width: 100%; }
+    }
+  </style>
 </head>
 <body>
-<header>
-  <nav class="navbar container">
-    <div class="logo">LOGO</div>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#hero">ANASAYFA</a></li>
-      <li><a href="#services">HİZMETLER</a></li>
-      <li><a href="#about">HAKKIMDA</a></li>
-      <li><a href="#contact">İLETİŞİM</a></li>
-    </ul>
-    <button class="nav-toggle" id="navToggle">
-      <i class="fas fa-bars"></i>
-    </button>
-  </nav>
-</header>
+  <h1>Ekotify</h1>
+  <button id="login">Spotify ile Giriş Yap</button>
+  <button id="play" style="display:none;">Şarkıyı Çal</button>
+  <div id="player-status"></div>
 
-<main>
-  <!-- Hero Bölümü -->
-  <section id="hero">
-    <div class="overlay"></div>
-    <div class="hero-content container">
-      <h1>Sosyal Medya Yönetimi & Reklam</h1>
-      <p>Markanı bir sonraki seviyeye taşı</p>
-      <a href="#services" class="btn">Hizmetlerime Göz At</a>
-    </div>
-  </section>
+  <script src="https://sdk.scdn.co/spotify-player.js"></script>
+  <script>
+    const clientId = "YOUR_CLIENT_ID"; // 🔴 Spotify client ID'ni buraya yaz
+    const redirectUri = "https://efkantuncc.github.io/ekotify/"; // 🔴 Redirect URI'n
+    const scopes = [
+      "streaming",
+      "user-read-email",
+      "user-read-private",
+      "user-modify-playback-state",
+      "user-read-playback-state"
+    ];
 
-  <!-- Services -->
-  <section id="services" class="container">
-    <h2>Hizmetlerimiz</h2>
-    <p class="note">* Sunulan fayda her müşteriye özeldir; sizin için en uygun stratejiyi birlikte belirliyoruz.</p>
-    <div class="services-grid">
-      <div class="service-card">
-        <i class="fas fa-bullhorn fa-2x"></i>
-        <h3>Reklam Yönetimi</h3>
-        <p>Facebook, Instagram reklam kampanyaları planlama ve optimizasyon.</p>
-      </div>
-      <div class="service-card">
-        <i class="fas fa-chart-line fa-2x"></i>
-        <h3>Hedef Kitle Artırma</h3>
-        <p>Doğru analiz ile potansiyel takipçi ve müşteri kitleni genişlet.</p>
-      </div>
-      <div class="service-card">
-        <i class="fas fa-comments fa-2x"></i>
-        <h3>İçerik Yönetimi</h3>
-        <p>Düzenli, ilgi çekici içerik takvimi hazırlayıp yönetiyorum.</p>
-      </div>
-      <div class="service-card">
-        <i class="fas fa-bolt fa-2x"></i>
-        <h3>Stratejik Danışmanlık</h3>
-        <p>Marka kimliği, hedef belirleme ve uzun vadeli yol haritası.</p>
-      </div>
-    </div>
-  </section>
+    const loginBtn = document.getElementById('login');
+    const playBtn = document.getElementById('play');
+    const statusDiv = document.getElementById('player-status');
 
-  <!-- About -->
-  <section id="about">
-    <div class="container about-grid">
-      <div class="about-image">
-        <img src="https://source.unsplash.com/400x400/?portrait" alt="Efkan Tunç"/>
-      </div>
-      <div class="about-text">
-        <h2>Hakkımda</h2>
-        <p>Merhaba, ben Efkan. Sosyal medya yönetimi ve dijital reklamcılık alanında 3+ yıllık deneyime sahibim. Her markaya özel çözümler geliştirerek, hedef kitlenin tam kalbine dokunan stratejiler tasarlıyorum.</p>
-      </div>
-    </div>
-  </section>
+    // Token alma
+    const hash = window.location.hash
+      .substring(1)
+      .split("&")
+      .reduce((initial, item) => {
+        if (item) {
+          const parts = item.split("=");
+          initial[parts[0]] = decodeURIComponent(parts[1]);
+        }
+        return initial;
+      }, {});
+    window.location.hash = "";
 
-  <!-- Contact -->
-  <section id="contact" class="container">
-    <h2>İletişim</h2>
-    <div class="contact-grid">
-      <form action="#" class="contact-form">
-        <input type="text" placeholder="Adınız" required/>
-        <input type="email" placeholder="E-posta" required/>
-        <textarea placeholder="Mesajınız..." rows="5" required></textarea>
-        <button type="submit" class="btn">Gönder</button>
-      </form>
-      <div class="contact-info">
-        <h3>Sosyal Medya & Mail</h3>
-        <p><i class="fab fa-instagram"></i> @efkwn38</p>
-        <p><i class="fas fa-envelope"></i> efkantunc13@example.com</p>
-      </div>
-    </div>
-  </section>
-</main>
+    const token = hash.access_token;
 
-<footer>
-  <p>© 2025 Efkan Tunç – Tüm hakları saklıdır.</p>
-</footer>
+    if (token) {
+      loginBtn.style.display = "none";
+      playBtn.style.display = "inline-block";
+      statusDiv.innerText = "Spotify'a bağlanıldı.";
 
-<script src="js/script.js"></script>
+      window.onSpotifyWebPlaybackSDKReady = () => {
+        const player = new Spotify.Player({
+          name: 'Ekotify Web Player',
+          getOAuthToken: cb => { cb(token); },
+          volume: 0.5
+        });
+
+        player.addListener('ready', ({ device_id }) => {
+          console.log('Device ID:', device_id);
+          playBtn.addEventListener('click', () => {
+            fetch(`https://api.spotify.com/v1/me/player/play?device_id=${device_id}`, {
+              method: 'PUT',
+              body: JSON.stringify({ uris: ['spotify:track:4cOdK2wGLETKBW3PvgPWqT'] }), // 🔊 Örnek: Rick Astley - Never Gonna Give You Up
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+              }
+            });
+          });
+        });
+
+        player.addListener('not_ready', ({ device_id }) => {
+          statusDiv.innerText = "Spotify oynatıcı hazır değil.";
+        });
+
+        player.connect();
+      };
+    }
+
+    loginBtn.addEventListener("click", () => {
+      const url = `https://accounts.spotify.com/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scopes.join('%20')}&response_type=token&show_dialog=true`;
+      window.location = url;
+    });
+  </script>
 </body>
 </html>
